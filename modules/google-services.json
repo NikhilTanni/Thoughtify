@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "957305764230",
+    "project_id": "thoughtify-tnikkify",
+    "storage_bucket": "thoughtify-tnikkify.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:957305764230:android:49e778913f346b84cf5407",
+        "android_client_info": {
+          "package_name": "in.tnikkify.thoughtify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "957305764230-sr3fsf2oeorfcdd149kic6njc7d66ng9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.tnikkify.thoughtify",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "957305764230-eg2il26spigrjp6vhn4fhjrvlqq9bcq7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcgvTjrYgOYq4y1HRIf-yluNBApPsps1s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "957305764230-eg2il26spigrjp6vhn4fhjrvlqq9bcq7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
