@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 const { StatusBar } = require("react-native")
 
-module.exports.StatusbarDefault = () => {
+module.exports.StatusbarDefault = (props) => {
+  const SBColor = (props.SBColor !== undefined) ? props.SBColor : "#FCF951";
+  const SBContentColor = (props.SBContentColor !== undefined) ? props.SBContentColor : "light-content";
+
   return (
-    <StatusBar barStyle="dark-content" backgroundColor='#fcf951' />
+    <StatusBar barStyle={SBContentColor} backgroundColor={SBColor} />
   )
 }

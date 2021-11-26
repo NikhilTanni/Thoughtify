@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
 const { GoogleSigninButton } = require("@react-native-google-signin/google-signin");
-const { View, Text, StyleSheet, Linking } = require("react-native");
+const { View, Text, StyleSheet } = require("react-native");
+import { getColorScheme } from './Utils';
 import { PoweredLogoImage } from './logo';
 import { PrivacyPolicyModal, TACModal } from './SplashScreenModal';
 
 
 
 module.exports.WelcomeScreen = function (props) {
-  const WSStyle = StyleSheet.create({
-    termsText: {
-      fontWeight: 'bold'
-    }
-  });
 
   const [isPPModalVisible, setPPModalVisibility] = useState(false);
   const togglePPModalVisibility = () => {
@@ -22,32 +18,80 @@ module.exports.WelcomeScreen = function (props) {
   const toggleTACModalVisibility = () => {
     setTACModalVisibility(!isTACModalVisible);
   }
+
+  const [colorScheme, setColorScheme] = useState("light");
+
+  useEffect(() => {
+    setColorScheme(getColorScheme());
+  }, []);
+
+  
+
+
+
+  const WSStyles = StyleSheet.create({
+    container: {
+      height: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: (colorScheme === "dark") ? "#000" : "#FFF"
+    },
+    title: {
+      fontSize: 30,
+      textAlign: 'center',
+      fontWeight: 'bold',
+      fontFamily: 'Roboto',
+      color: (colorScheme === "dark") ? "#FCF951" : "#3A95FF"
+    },
+    poweredByText: {
+      marginTop: '5%',
+      fontSize: 12,
+      color: (colorScheme === "dark") ? "#C0C0C0" : "#808080"
+    },
+    TACDisplayText: {
+      fontSize: 9,
+      marginTop: '10%',
+      textAlign: 'center',
+      color: (colorScheme === "dark") ? "#C0C0C0" : "#808080"
+    },
+    gSigninBtn: {
+      marginTop: '20%'
+    },
+    termsText: {
+      fontWeight: 'bold',
+      color: (colorScheme === "dark") ? "#fcf951" : "#3A95FF"
+    }
+  });
+
+  
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>
+    <View style={WSStyles.container}>
+      <Text style={WSStyles.title}>
         Thoughtify
       </Text>
-      <Text style={styles.poweredByText}>
+      <Text style={WSStyles.poweredByText}>
         Powered by
       </Text>
       <PoweredLogoImage />
       <GoogleSigninButton
-        style={styles.gSigninBtn}
+        style={WSStyles.gSigninBtn}
+        // color={(colorScheme === "dark") ? GoogleSigninButton.Color.Dark : GoogleSigninButton.Color.Dark}
+        color={GoogleSigninButton.Color.Dark}
         onPress={() => {
-          props._signIn(props.updateState);
+          props._signIn(props.setloggedIn);
         }}
       />
-      <Text style={{fontSize: 9, marginTop: '10%', textAlign: 'center'}}>
+      <Text style={WSStyles.TACDisplayText}>
         By continuing you agree to 
         <Text
-          style={WSStyle.termsText}
+          style={WSStyles.termsText}
           onPress={() => {
             togglePPModalVisibility();
           }}
         > Privacy Policy </Text>
         and
         <Text
-          style={WSStyle.termsText}
+          style={WSStyles.termsText}
           onPress={() => {
             toggleTACModalVisibility();
           }}
@@ -59,24 +103,3 @@ module.exports.WelcomeScreen = function (props) {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  title: {
-    fontSize: 30,
-    textAlign: 'center',
-    color: '#3A95FF',
-    fontWeight: 'bold',
-    fontFamily: 'Roboto'
-  },
-  poweredByText: {
-    marginTop: '5%',
-    fontSize: 12
-  },
-  gSigninBtn: {
-    marginTop: '20%'
-  }
-});

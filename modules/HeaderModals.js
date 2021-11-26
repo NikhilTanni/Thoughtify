@@ -1,12 +1,26 @@
-import React from 'react';
-import { Alert, Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
 import Modal from "react-native-modal";
-import { StatusbarDefault } from './StatusBarMod';
+import { getColorScheme } from './Utils';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import FEIcon from 'react-native-vector-icons/Feather';
 
 
 module.exports.MainModal = (props) => {
+
+  const [colorScheme, setColorScheme] = useState(getColorScheme());
+  const [ModalBGColor, setModalBGColor] = useState(() => {
+    if (colorScheme === "dark") {
+      return "#000"
+    } else {
+      return "#3A95FF";
+    }
+  });
+
+  useEffect(() => {
+    //
+  }, []);
 
   const styles = StyleSheet.create({
     PoweredLogoImage: {
@@ -53,7 +67,7 @@ module.exports.MainModal = (props) => {
 
   return (
     <View style={styles.MainModal}>
-      <Modal isVisible={props.isMainModalVisible} backdropColor="#3A95FF" backdropOpacity={0.88} onBackButtonPress={()=>{props.toggleMainModal()}} >
+      <Modal isVisible={props.isMainModalVisible} backdropColor={ModalBGColor} backdropOpacity={0.88} onBackButtonPress={()=>{props.toggleMainModal()}} >
 
       <View style={styles.IconContainerParent}>
         <TouchableOpacity
@@ -64,7 +78,7 @@ module.exports.MainModal = (props) => {
           }}
         >
           <FAIcon name="close" size={25} style={styles.MainModalIcon} />
-          <Text>Close</Text>
+          <Text style={{color: "#000"}}>Close</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -79,7 +93,7 @@ module.exports.MainModal = (props) => {
                       text: "Yes",
                       onPress: () => {
                         // logout here
-                        props._signOut(props.updateState);
+                        props._signOut(props.setloggedIn);
                       }
                     }, {
                       text: "No",
@@ -92,7 +106,7 @@ module.exports.MainModal = (props) => {
             }}
           >
             <FEIcon name="log-out" size={25} style={styles.MainModalIcon} />
-            <Text>Logout</Text>
+            <Text style={{color: "#000"}}>Logout</Text>
           </TouchableOpacity>
       </View>
 
@@ -105,22 +119,71 @@ module.exports.MainModal = (props) => {
 }
 
 module.exports.AddNewThoughtModal = (props) => {
-  const toggleAddNewThoughtModal = () => {
-    //
-  };
 
-  const styles = StyleSheet.create({
+  const [colorScheme, setColorScheme] = useState("light");
+  const [ModalBGColor, setModalBGColor] = useState("");
+
+  const [categoryOpen, setCategoryOpen] = useState(false);
+  const [categoryValue, setCategoryValue] = useState("init");
+  const [categoryList, setCategoryList] = useState([
+    {
+      label: "Select Category",
+      value: "init",
+      
+    },
+    {
+      label: "Apple",
+      value: "apple"
+    },
+    {
+      label: "Banana",
+      value: "banana"
+    }
+  ]);
+
+  useEffect(() => {
+    const cc = getColorScheme();
+    setColorScheme(cc);
+    if (cc === "dark") {
+      setModalBGColor("#000");
+    } else {
+      setModalBGColor("#FFF");
+    }
+  }, []);
+
+  const ANTstyles = StyleSheet.create({
     AddNewThoughtModal: {
       flex: 1
     },
     ANTTitle: {
-      backgroundColor: 'rgba(252,249,81,1)',
-      color: "#3A95FF",
+      backgroundColor: (colorScheme === "dark") ? "rgba(252,249,81,0.1)" : "rgba(58,149,255,1)",
+      borderColor: (colorScheme === "dark") ? "rgba(252,249,81,1)" : "rgba(0,0,0,0)",
+      borderRadius: 8,
+      borderWidth: 1,
+      color: "#FCF951",
     },
     ANTDescription: {
-      backgroundColor: 'rgba(252,249,81,1)',
-      color: "#3A95FF",
-      marginTop: '2%'
+      backgroundColor: (colorScheme === "dark") ? "rgba(252,249,81,0.1)" : "rgba(58,149,255,1)",
+      borderColor: (colorScheme === "dark") ? "rgba(252,249,81,1)" : "rgba(0,0,0,0)",
+      borderRadius: 8,
+      borderWidth: 1,
+      color: "#FCF951",
+      marginTop: '4%'
+    },
+    ANTCategoryDropDown: {
+      backgroundColor: (colorScheme === "dark") ? "rgba(0,0,0,1)" : "rgba(255,255,255,1)",
+      borderWidth: 1,
+      borderColor: (colorScheme === "dark") ? "rgba(252,249,81,1)" : "rgba(58,149,255,1)",
+      elevation: 3
+    },
+    ANTCategory: {
+      backgroundColor: (colorScheme === "dark") ? "rgba(252,249,81,0.1)" : "rgba(255,255,255,1)",
+      borderColor: (colorScheme === "dark") ? "rgba(252,249,81,1)" : "rgba(0,0,0,0)",
+      marginTop: '4%',
+      elevation: 2
+    },
+    ANTCategoryText: {
+      color: (colorScheme === "dark") ? "#FFF" : "rgba(58,149,255,1)"
     },
     ANTBtnBar1: {
       display: 'flex',
@@ -129,16 +192,18 @@ module.exports.AddNewThoughtModal = (props) => {
       marginTop: '8%'
     },
     ANTSaveBtn: {
-      backgroundColor: 'rgba(252,249,81,1)',
+      backgroundColor: (colorScheme === "dark") ? "rgba(58,149,255,0.1)" : "rgba(58,149,255,1)",
       padding: '4%',
       width: '40%',
+      borderColor: '#FCF951',
+      borderWidth: 1,
       marginLeft: '1%',
       flex: 1,
       alignItems: 'center'
     },
     ANTCancelBtn: {
-      backgroundColor: 'rgba(252,249,81,1)',
-      borderColor: 'rgba(252,249,81,1)',
+      backgroundColor: (colorScheme === "dark") ? "rgba(58,149,255,0.1)" : "rgba(150,150,150,1)",
+      borderColor: 'rgba(255,255,255,0.4)',
       borderWidth: 2,
       padding: '4%',
       width: '40%',
@@ -169,21 +234,48 @@ module.exports.AddNewThoughtModal = (props) => {
     createAlertForNewThoughtDiscard();
   }
   return (
-    <View style={styles.AddNewThoughtModal}>
-      <Modal isVisible={props.isAddNewThoughtModalVisible} backdropColor="#3A95FF" backdropOpacity={0.9} onBackButtonPress={()=>{closeThisModal()}} >
-        <TextInput style={styles.ANTTitle} placeholder={"What you're thinking about??"} />
-        <TextInput style={styles.ANTDescription} placeholder={"Please explain more . . ."} multiline={true} maxLength={500} />
-        <View style={styles.ANTBtnBar1}>
+    <View style={ANTstyles.AddNewThoughtModal}>
+      <Modal
+        isVisible={props.isAddNewThoughtModalVisible}
+        backdropColor={ModalBGColor}
+        backdropOpacity={1}
+        onBackButtonPress={()=>{closeThisModal()}}
+      >
+        <TextInput
+          style={ANTstyles.ANTTitle}
+          placeholder={"What you're thinking about??"}
+          placeholderTextColor={(colorScheme === "dark") ? "#FCF951" : "#FFF"}
+        />
+        <TextInput
+          style={ANTstyles.ANTDescription}
+          placeholder={"Please explain more . . ."}
+          placeholderTextColor={(colorScheme === "dark") ? "#FCF951" : "#FFF"}
+          multiline={true}
+          maxLength={500}
+        />
+        <DropDownPicker
+          open={categoryOpen}
+          value={categoryValue}
+          items={categoryList}
+          setOpen={setCategoryOpen}
+          setValue={setCategoryValue}
+          setItems={setCategoryList}
+          style={ANTstyles.ANTCategory}
+          textStyle={ANTstyles.ANTCategoryText}
+          dropDownContainerStyle={ANTstyles.ANTCategoryDropDown}
+          mode="SIMPLE"
+        />
+        <View style={ANTstyles.ANTBtnBar1}>
           <TouchableOpacity
-            style={styles.ANTCancelBtn}
+            style={ANTstyles.ANTCancelBtn}
             onPress={()=>{
               closeThisModal();
             }}
           >
-              <Text style={{color:'brown'}}>Nah, Discard off!</Text>
+              <Text style={{color:'#FFFFFF'}}>Nah, Discard off!</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.ANTSaveBtn}>
-            <Text style={{color:'#3A95FF'}}>That's all, Save it!</Text>
+          <TouchableOpacity style={ANTstyles.ANTSaveBtn}>
+            <Text style={{color:'#FCF951'}}>That's all, Save it!</Text>
           </TouchableOpacity>
         </View>
       </Modal>

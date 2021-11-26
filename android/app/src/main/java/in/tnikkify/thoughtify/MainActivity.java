@@ -1,4 +1,4 @@
-package com.thoughtify;
+package in.tnikkify.thoughtify;
 
 import com.facebook.react.ReactActivity;
 

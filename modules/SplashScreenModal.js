@@ -1,14 +1,23 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Modal from "react-native-modal";
-// import Markdown from 'react-native-markdown-renderer';
+import Markdown from 'react-native-markdown-display';
 import { PrivacyPolicyData, TermsConditions } from './SplashScreenData'
+import { getColorScheme } from './Utils';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 module.exports.PrivacyPolicyModal = (props) => {
+
+  const [colorScheme, setColorScheme] = useState("light");
+
+  useEffect(() => {
+    setColorScheme(getColorScheme());
+  }, []);
+
+
   const styles = StyleSheet.create({
     PPModal: {
-      backgroundColor: '#FCF951'
+      backgroundColor: (colorScheme === "dark") ? "#000" : "#FFF"
     },
     PPModalText: {
       color: '#3A95FF',
@@ -21,10 +30,9 @@ module.exports.PrivacyPolicyModal = (props) => {
       <Modal isVisible={props.isPPModalVisible} onBackButtonPress={props.togglePPModalVisibility} backgroundColor={styles.PPModal.backgroundColor}>
         <SafeAreaView>
           <ScrollView style={styles.PPModalText}>
-            {/* <Markdown>
+            <Markdown>
               {PrivacyPolicyData()}
-            </Markdown> */}
-            <Text>PP</Text>
+            </Markdown>
           </ScrollView>
         </SafeAreaView>
       </Modal>
@@ -33,9 +41,17 @@ module.exports.PrivacyPolicyModal = (props) => {
 }
 
 module.exports.TACModal = (props) => {
+
+  const [colorScheme, setColorScheme] = useState("light");
+
+  useEffect(() => {
+    setColorScheme(getColorScheme());
+  }, []);
+
+
   const styles = StyleSheet.create({
     TACModal: {
-      backgroundColor: '#FCF951'
+      backgroundColor: (colorScheme === "dark") ? "#000" : "#FFF"
     },
     TACModalText: {
       color: '#3A95FF',
@@ -48,10 +64,9 @@ module.exports.TACModal = (props) => {
       <Modal isVisible={props.isTACModalVisible} onBackButtonPress={props.toggleTACModalVisibility} backgroundColor={styles.TACModal.backgroundColor}>
         <SafeAreaView>
           <ScrollView style={styles.TACModalText}>
-            {/* <Markdown>
+            <Markdown>
               {TermsConditions()}
-            </Markdown> */}
-            <Text>TAC</Text>
+            </Markdown>
           </ScrollView>
         </SafeAreaView>
       </Modal>

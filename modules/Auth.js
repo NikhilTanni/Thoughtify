@@ -4,30 +4,31 @@ import {
   statusCodes,
   } from '@react-native-google-signin/google-signin';
 import googleJsonData from './google-services.json';
+import { showToastMessage } from './Utils';
 
-_signIn = async (updateState) => {
+_signIn = async (setloggedIn) => {
   try {
     await GoogleSignin.hasPlayServices();
     const {accessToken, idToken} = await GoogleSignin.signIn();
-    updateState({loggedIn: true});
+    setloggedIn(true);
     const credential = auth.GoogleAuthProvider.credential(
       idToken,
       accessToken,
     );
     await auth().signInWithCredential(credential);
-    alert("You are now signed in!");
+    showToastMessage("Login Successful!")
   } catch (error) {
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-      alert("Signin cancelled!");
+      showToastMessage("Signin cancelled!");
     } else if (error.code === statusCodes.IN_PROGRESS) {
-      alert("Signin in-progress");
+      showToastMessage("Signin in-progress");
     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-      alert("Play services not available / outdated. Contact the admin");
+      showToastMessage("Play services not available / outdated. Contact the admin");
     } else {
       if (error.code == 7) {
-        alert("you must connect to the internet for signing in");
+        showToastMessage("you must connect to the internet for signing in");
       } else {
-        alert("some other err");
+        showToastMessage(`Error logging-in. Code:${error.code}. Contact admin for support.`);
       }
     }
   }
@@ -40,13 +41,12 @@ _isSignedIn = async () => {
 }
 module.exports._isSignedIn = _isSignedIn;
 
-_signOut = async (updateState2) => {
+_signOut = async (setloggedIn) => {
   try {
     await GoogleSignin.revokeAccess();
     await GoogleSignin.signOut();
-    updateState2({loggedIn: false});
-    updateState2({userInfo: []});
-    alert("signout successful!");
+    setloggedIn(false);
+    showToastMessage("signout successful!");
   } catch (error) {
     alert("error while signing out. Contact the admin");
     console.log("----------------------------------");
@@ -63,7 +63,7 @@ _googleSignInConfigure = async (mode="mount") => {
     offlineAccess: true // if you want to access Google API on behalf of the user FROM YOUR SERVER
   });
   if (mode === "mount") {
-    this._isSignedIn();
+    _isSignedIn();
   }
 }
 module.exports._googleSignInConfigure = _googleSignInConfigure;
